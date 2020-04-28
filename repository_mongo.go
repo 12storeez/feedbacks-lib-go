@@ -15,7 +15,7 @@ var (
 )
 
 type Mongo struct {
-	client *mongo.Client
+	Client *mongo.Client
 	DB     *mongo.Database
 }
 
@@ -29,7 +29,7 @@ func NewMongoRepository(mongo *Mongo) Repository {
 	}
 }
 
-func (r mongoRepository) FindOne(condition map[string]interface{}) (*Feedback, error)  {
+func (r mongoRepository) FindOne(condition map[string]interface{}) (*Feedback, error) {
 	fb := &Feedback{}
 	err := r.mongo.DB.Collection(FEEDBACKS_COLLECTION).FindOne(context.TODO(), condition).Decode(fb)
 	if err != nil {
