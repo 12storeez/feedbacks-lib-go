@@ -1,4 +1,4 @@
-module feedbacks-lib-go
+module github.com/12storeez/feedbacks-lib-go
 
 go 1.14
 
