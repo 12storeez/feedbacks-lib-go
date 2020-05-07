@@ -2,7 +2,7 @@ package feedbacks
 
 import (
 	"context"
-	"github.com/pkg/errors"
+	"fmt"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -37,7 +37,7 @@ func (r mongoRepository) FindOne(condition map[string]interface{}) (*Feedback, e
 		case mongo.ErrNoDocuments:
 			return nil, ErrNoFeedbacks
 		default:
-			return nil, errors.Errorf("find feedback error: %v", err)
+			return nil, fmt.Errorf("find feedback error: %v", err)
 		}
 	}
 	return fb, nil
@@ -46,7 +46,16 @@ func (r mongoRepository) FindOne(condition map[string]interface{}) (*Feedback, e
 func (r mongoRepository) Update(filter, update map[string]interface{}) error {
 	_, err := r.mongo.DB.Collection(FEEDBACKS_COLLECTION).UpdateOne(context.TODO(), filter, update)
 	if err != nil {
-		return errors.Errorf("r.UpdateSent: UpdateOne: %v", err)
+		return fmt.Errorf("r.UpdateSent: UpdateOne: %v", err)
 	}
+	return nil
+}
+
+func (r mongoRepository) InsertOne(feedback *Feedback) error {
+	_, err := r.mongo.DB.Collection(FEEDBACKS_COLLECTION).InsertOne(context.TODO(), feedback)
+	if err != nil {
+		return fmt.Errorf("r.InsertOne: InsertOne: %v", err)
+	}
+
 	return nil
 }
