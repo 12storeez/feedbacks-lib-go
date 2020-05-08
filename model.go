@@ -13,7 +13,7 @@ type Feedback struct {
 	Phone            string             `bson:",omitempty" json:"phone"`
 	UserId           string             `bson:"user_id,omitempty" json:"user_id"`
 	Contacts         string             `bson:",omitempty" json:"contacts"`
-	Ts               time.Time          `bson:",omitempty" json:"-"`
+	Ts               time.Time          `bson:",omitempty" json:"ts"`
 	Source           string             `bson:",omitempty" json:"source"`
 	Date             string             `bson:",omitempty" json:"date"`
 	Channel          string             `bson:",omitempty" json:"channel"`
@@ -29,9 +29,9 @@ type Feedback struct {
 	Receipt          string             `bson:",omitempty" json:"receipt"`
 	Store            string             `bson:",omitempty" json:"store"`
 	User             string             `bson:",omitempty" json:"user"`
-	Sent             bool               `json:"-"`
-	MindboxSent      bool               `bson:"mindbox_sent" json:"-"`
+	Sent             bool               `bson:"sent" json:"sent"`
+	MindboxSent      bool               `bson:"mindbox_sent" json:"mindbox_sent"`
 	ArticlesCount    map[string]int     `bson:"-" json:"-"`
-	Status           string             `bson:",omitempty" json:"-"`
-	Created          time.Time          `bson:",omitempty" json:"-"`
+	Status           string             `bson:",omitempty" json:"status"`
+	Created          time.Time          `bson:",omitempty" json:"created"`
 }
