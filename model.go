@@ -33,5 +33,6 @@ type Feedback struct {
 	MindboxSent      bool               `bson:"mindbox_sent" json:"mindbox_sent"`
 	ArticlesCount    map[string]int     `bson:"-" json:"-"`
 	Status           string             `bson:",omitempty" json:"status"`
+	Conclusion       string             `bson:",omitempty" json:"conclusion"`
 	Created          time.Time          `bson:",omitempty" json:"created"`
 }
