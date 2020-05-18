@@ -34,5 +34,6 @@ type Feedback struct {
 	ArticlesCount    map[string]int     `bson:"-" json:"-"`
 	Status           string             `bson:",omitempty" json:"status"`
 	Conclusion       string             `bson:",omitempty" json:"conclusion"`
+	SourceType       string             `bson:"source_type,omitempty" json:"source_type"`
 	Created          time.Time          `bson:",omitempty" json:"created"`
 }
