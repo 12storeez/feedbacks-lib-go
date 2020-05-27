@@ -15,8 +15,8 @@ var (
 )
 
 type Mongo struct {
-	Client *mongo.Client
-	DB     *mongo.Database
+	Client   *mongo.Client
+	Database *mongo.Database
 }
 
 type mongoRepository struct {
@@ -31,7 +31,7 @@ func NewMongoRepository(mongo *Mongo) Repository {
 
 func (r mongoRepository) FindOne(condition map[string]interface{}) (*Feedback, error) {
 	fb := &Feedback{}
-	err := r.mongo.DB.Collection(FEEDBACKS_COLLECTION).FindOne(context.TODO(), condition).Decode(fb)
+	err := r.mongo.Database.Collection(FEEDBACKS_COLLECTION).FindOne(context.TODO(), condition).Decode(fb)
 	if err != nil {
 		switch err {
 		case mongo.ErrNoDocuments:
@@ -44,7 +44,7 @@ func (r mongoRepository) FindOne(condition map[string]interface{}) (*Feedback, e
 }
 
 func (r mongoRepository) Update(filter, update map[string]interface{}) error {
-	_, err := r.mongo.DB.Collection(FEEDBACKS_COLLECTION).UpdateOne(context.TODO(), filter, update)
+	_, err := r.mongo.Database.Collection(FEEDBACKS_COLLECTION).UpdateOne(context.TODO(), filter, update)
 	if err != nil {
 		return fmt.Errorf("r.UpdateSent: UpdateOne: %v", err)
 	}
@@ -52,7 +52,7 @@ func (r mongoRepository) Update(filter, update map[string]interface{}) error {
 }
 
 func (r mongoRepository) InsertOne(feedback *Feedback) error {
-	_, err := r.mongo.DB.Collection(FEEDBACKS_COLLECTION).InsertOne(context.TODO(), feedback)
+	_, err := r.mongo.Database.Collection(FEEDBACKS_COLLECTION).InsertOne(context.TODO(), feedback)
 	if err != nil {
 		return fmt.Errorf("r.InsertOne: InsertOne: %v", err)
 	}
