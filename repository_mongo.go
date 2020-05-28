@@ -4,10 +4,11 @@ import (
 	"context"
 	"fmt"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 const (
-	FEEDBACKS_COLLECTION = "survey_feedbacks"
+	FEEDBACKS_DEFAULT_COLLECTION = "survey_feedbacks"
 )
 
 var (
@@ -20,18 +21,23 @@ type Mongo struct {
 }
 
 type mongoRepository struct {
-	mongo *Mongo
+	mongo      *Mongo
+	collection string
 }
 
-func NewMongoRepository(mongo *Mongo) Repository {
+func NewMongoRepository(mongo *Mongo, collection string) Repository {
+	if collection == "" {
+		collection = FEEDBACKS_DEFAULT_COLLECTION
+	}
 	return &mongoRepository{
-		mongo: mongo,
+		mongo:      mongo,
+		collection: collection,
 	}
 }
 
 func (r mongoRepository) FindOne(condition map[string]interface{}) (*Feedback, error) {
 	fb := &Feedback{}
-	err := r.mongo.Database.Collection(FEEDBACKS_COLLECTION).FindOne(context.TODO(), condition).Decode(fb)
+	err := r.mongo.Database.Collection(r.collection).FindOne(context.TODO(), condition).Decode(fb)
 	if err != nil {
 		switch err {
 		case mongo.ErrNoDocuments:
@@ -44,7 +50,7 @@ func (r mongoRepository) FindOne(condition map[string]interface{}) (*Feedback, e
 }
 
 func (r mongoRepository) Update(filter, update map[string]interface{}) error {
-	_, err := r.mongo.Database.Collection(FEEDBACKS_COLLECTION).UpdateOne(context.TODO(), filter, update)
+	_, err := r.mongo.Database.Collection(r.collection).UpdateOne(context.TODO(), filter, update)
 	if err != nil {
 		return fmt.Errorf("r.UpdateSent: UpdateOne: %v", err)
 	}
@@ -52,10 +58,19 @@ func (r mongoRepository) Update(filter, update map[string]interface{}) error {
 }
 
 func (r mongoRepository) InsertOne(feedback *Feedback) error {
-	_, err := r.mongo.Database.Collection(FEEDBACKS_COLLECTION).InsertOne(context.TODO(), feedback)
+	_, err := r.mongo.Database.Collection(r.collection).InsertOne(context.TODO(), feedback)
 	if err != nil {
 		return fmt.Errorf("r.InsertOne: InsertOne: %v", err)
 	}
 
 	return nil
+}
+
+func (r mongoRepository) CountFeedbacks(condition map[string]interface{}) (int, error) {
+	count, err := r.mongo.Database.Collection(r.collection).
+		CountDocuments(context.Background(), condition, &options.CountOptions{})
+	if err != nil {
+		return 0, fmt.Errorf("CountFeedbacks: %v", err)
+	}
+	return int(count), nil
 }
