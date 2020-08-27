@@ -35,5 +35,7 @@ type Feedback struct {
 	Status           string             `bson:",omitempty" json:"status"`
 	Conclusion       string             `bson:",omitempty" json:"conclusion"`
 	SourceType       string             `bson:"source_type,omitempty" json:"source_type"`
+	TransportCompany string             `bson:"transport_company,omitempty" json:"transport_company"`
+	TransportCity    string             `bson:"TransportCity,omitempty" json:"TransportCity"`
 	Created          time.Time          `bson:",omitempty" json:"created"`
 }
