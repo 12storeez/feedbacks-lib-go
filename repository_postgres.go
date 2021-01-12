@@ -9,6 +9,20 @@ type postgres struct {
 	db *pg.DB
 }
 
+// FindByID...
+func (p postgres) FindByID(id int) (*Feedback, error) {
+	var result Feedback
+
+	if err := p.db.
+		Model(&result).
+		Where("id = ?", id).
+		Select(); err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
+
 // NewPostgresRepository...
 func NewPostgresRepository(db *pg.DB) RepositoryPG {
 	return &postgres{
@@ -17,14 +31,12 @@ func NewPostgresRepository(db *pg.DB) RepositoryPG {
 }
 
 // FindOneToday...
-// Возвращает фидбек, который сохранили сегодня через форму
-// но еще не отправленный в slack
-func (p postgres) FindOneToday() (*Feedback, error) {
+func (p postgres) FindOneNoSentToSlack(afterBorderTime time.Time) (*Feedback, error) {
 	var result Feedback
 
 	if err := p.db.
 		Model(&result).
-		Where("ts >= ?", getToday()).
+		Where("created >= ?", afterBorderTime).
 		Where("sent = ?", false).
 		Limit(1).
 		Select(); err != nil {
@@ -36,7 +48,11 @@ func (p postgres) FindOneToday() (*Feedback, error) {
 
 // Update...
 func (p postgres) Update(fb *Feedback) error {
-	if _, err := p.db.Model(&fb).UpdateNotZero(); err != nil {
+	fb.Updated = time.Now()
+	if _, err := p.db.
+		Model(&fb).
+		WherePK().
+		UpdateNotZero(); err != nil {
 		return err
 	}
 	return nil
@@ -44,14 +60,16 @@ func (p postgres) Update(fb *Feedback) error {
 
 // Insert...
 func (p postgres) Insert(fb *Feedback) error {
-	if _, err := p.db.Model(&fb).Insert(); err != nil {
+	if _, err := p.db.
+		Model(&fb).
+		Insert(); err != nil {
 		return err
 	}
 	return nil
 }
 
-// CountFeedback...
-func (p postgres) CountFeedback(article string) (int, error) {
+// CountByArticle...
+func (p postgres) CountByArticle(article string) (int, error) {
 	count, err := p.db.
 		Model(&Feedback{}).
 		Where("article = ?", article).
@@ -60,9 +78,4 @@ func (p postgres) CountFeedback(article string) (int, error) {
 		return 0, err
 	}
 	return count, nil
-}
-
-func getToday() time.Time {
-	t := time.Now()
-	return time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
 }
