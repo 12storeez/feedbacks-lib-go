@@ -1,5 +1,7 @@
 package feedbacks
 
+import "time"
+
 type Repository interface {
 	FindOne(condition map[string]interface{}) (*Feedback, error)
 	Update(filter, update map[string]interface{}) error
@@ -9,8 +11,9 @@ type Repository interface {
 
 // RepositoryPG...
 type RepositoryPG interface {
-	FindOneToday() (*Feedback, error)
+	FindOneNoSentToSlack(afterBorderTime time.Time) (*Feedback, error)
 	Update(fb *Feedback) error
 	Insert(fb *Feedback) error
-	CountFeedback(article string) (int, error)
+	CountByArticle(article string) (int, error)
+	FindByID(id int) (*Feedback, error)
 }
