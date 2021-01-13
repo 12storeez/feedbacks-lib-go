@@ -15,5 +15,5 @@ type RepositoryPG interface {
 	Update(fb *Feedback) error
 	Insert(fb *Feedback) error
 	CountByArticle(article string) (int, error)
-	FindByID(id int) (*Feedback, error)
+	FindBy(id int) (*Feedback, error)
 }

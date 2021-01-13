@@ -33,7 +33,7 @@ type Feedback struct {
 	Sent               bool           `pg:"sent" bson:"sent" json:"sent"`
 	MindboxSent        bool           `pg:"mindbox_sent" bson:"mindbox_sent" json:"mindbox_sent"`
 	ArticlesCount      map[string]int `pg:"-" bson:"-" json:"-"`
-	Status             string         `pg:",omitempty" bson:",omitempty" json:"status"`
+	Status             string         `pg:"status" bson:",omitempty" json:"status"`
 	Conclusion         string         `pg:"conclusion" bson:",omitempty" json:"conclusion"`
 	SourceType         string         `pg:"source_type" bson:"source_type,omitempty" json:"source_type"`
 	TransportCompany   string         `pg:"transport_company" bson:"transport_company,omitempty" json:"transport_company"`

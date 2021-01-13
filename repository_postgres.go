@@ -10,7 +10,7 @@ type postgres struct {
 }
 
 // FindByID...
-func (p postgres) FindByID(id int) (*Feedback, error) {
+func (p postgres) FindBy(id int) (*Feedback, error) {
 	var result Feedback
 
 	if err := p.db.
@@ -50,7 +50,7 @@ func (p postgres) FindOneNoSentToSlack(afterBorderTime time.Time) (*Feedback, er
 func (p postgres) Update(fb *Feedback) error {
 	fb.Updated = time.Now()
 	if _, err := p.db.
-		Model(&fb).
+		Model(fb).
 		WherePK().
 		UpdateNotZero(); err != nil {
 		return err
@@ -61,7 +61,7 @@ func (p postgres) Update(fb *Feedback) error {
 // Insert...
 func (p postgres) Insert(fb *Feedback) error {
 	if _, err := p.db.
-		Model(&fb).
+		Model(fb).
 		Insert(); err != nil {
 		return err
 	}
