@@ -6,6 +6,7 @@ import (
 )
 
 type Feedback struct {
+	tableName                 struct{}           `pg:"portal.feedback" bson:"-" json:"-"`
 	ID                        int                `pg:"id,pk" bson:"-" json:"-"`
 	Id                        primitive.ObjectID `pg:"mongo_id" bson:"_id" json:"-"`
 	Survey                    int                `pg:"survey" json:"survey"`
