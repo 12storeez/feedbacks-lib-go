@@ -11,4 +11,5 @@ type RepositoryPG interface {
 	SelectOneForSlack() (*Feedback, error)
 	SelectBy(id int) (*Feedback, error)
 	Upsert(fb *Feedback) error
+	CountFeedbackBy(article int) (int, error)
 }
