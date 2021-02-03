@@ -15,7 +15,7 @@ func NewPostgresRepository(db *pg.DB) RepositoryPG {
 	}
 }
 
-func (p postgresRepository) CountFeedbackBy(article int) (int, error) {
+func (p postgresRepository) CountFeedbackBy(article string) (int, error) {
 
 	return 1, nil
 }
