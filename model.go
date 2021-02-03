@@ -37,8 +37,10 @@ type Feedback struct {
 	MindboxSent               bool               `pg:"mindbox_sent" bson:"mindbox_sent" json:"mindbox_sent"`
 	ArticlesCount             map[string]int     `pg:"-" bson:"-" json:"-"`
 	Status                    string             `pg:"status" bson:",omitempty" json:"status"`
+	StatusNew                 time.Time          `pg:"status_new" json:"status_new"`
 	StatusInWork              time.Time          `pg:"status_inwork" json:"status_inwork"`
 	StatusDone                time.Time          `pg:"status_done" json:"status_done"`
+	StatusErr                 time.Time          `pg:"status_err" json:"status_err"`
 	Conclusion                string             `pg:"conclusion" bson:",omitempty" json:"conclusion"`
 	SourceType                string             `pg:"source_type" bson:"source_type,omitempty" json:"source_type"`
 	TransportCompany          string             `pg:"transport_company" bson:"transport_company,omitempty" json:"transport_company"`
