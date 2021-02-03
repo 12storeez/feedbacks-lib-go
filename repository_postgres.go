@@ -73,7 +73,8 @@ func (p postgresRepository) Upsert(fb *Feedback) error {
 		article = EXCLUDED.article, store_date = EXCLUDED.store_date, order_id = EXCLUDED.order_id, receipt = EXCLUDED.receipt,
 		store = EXCLUDED.store, "user" = EXCLUDED.user, sent = EXCLUDED.sent, mindbox_sent = EXCLUDED.mindbox_sent,
 		status = EXCLUDED.status, conclusion = EXCLUDED.conclusion, source_type = EXCLUDED.source_type, transport_company = EXCLUDED.transport_company,
-		transport_city = EXCLUDED.transport_city, updated = ?`, time.Now()).
+		transport_city = EXCLUDED.transport_city, status_new = EXCLUDED.status_new, status_inwork = EXCLUDED.status_inwork, 
+		status_done = EXCLUDED.status_done, status_err = EXCLUDED.status_err, updated = ?`, time.Now()).
 		Insert(); err != nil {
 		return err
 	}
