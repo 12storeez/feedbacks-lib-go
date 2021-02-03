@@ -15,6 +15,11 @@ func NewPostgresRepository(db *pg.DB) RepositoryPG {
 	}
 }
 
+func (p postgresRepository) CountFeedbackBy(article int) (int, error) {
+
+	return 1, nil
+}
+
 func (p postgresRepository) SelectOneForSlack() (*Feedback, error) {
 	result := &Feedback{}
 
