@@ -2,6 +2,7 @@ package feedbacks
 
 import (
 	"github.com/go-pg/pg/v10"
+	"strconv"
 	"time"
 )
 
@@ -39,14 +40,39 @@ func (p postgresRepository) SelectOneForSlack() (*Feedback, error) {
 	return result, nil
 }
 
-func (p postgresRepository) SelectBy(id int) (*Feedback, error) {
+func (p postgresRepository) SelectBy(id string) (*Feedback, error) {
+	// если айдишник не можем преобразовать в число, скорее всего запрос идет по айдишнику монги
+	// нужно для поддержки кнопок у одзывов для которых в апи слака сохранен айдишник монги
+	pgID, err := strconv.Atoi(id)
+	if err != nil {
+		return p.selectBy(id)
+	}
+
 	result := &Feedback{
-		ID: id,
+		ID: pgID,
 	}
 
 	if err := p.db.
 		Model(result).
 		WherePK().
+		Select(); err != nil {
+		switch err {
+		case pg.ErrNoRows:
+			return nil, ErrNoFeedbacks
+		default:
+			return nil, err
+		}
+	}
+
+	return result, nil
+}
+
+func (p postgresRepository) selectBy(mongoID string) (*Feedback, error) {
+	result := &Feedback{}
+
+	if err := p.db.
+		Model(result).
+		Where("mongo_id = ?", mongoID).
 		Select(); err != nil {
 		switch err {
 		case pg.ErrNoRows:

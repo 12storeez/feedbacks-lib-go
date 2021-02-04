@@ -9,7 +9,7 @@ type Repository interface {
 
 type RepositoryPG interface {
 	SelectOneForSlack() (*Feedback, error)
-	SelectBy(id int) (*Feedback, error)
+	SelectBy(id string) (*Feedback, error)
 	Upsert(fb *Feedback) error
 	CountFeedbackBy(article string) (int, error)
 }

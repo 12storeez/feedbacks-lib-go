@@ -8,7 +8,8 @@ import (
 type Feedback struct {
 	tableName                 struct{}           `pg:"portal.feedback" bson:"-" json:"-"`
 	ID                        int                `pg:"id,pk" bson:"-" json:"-"`
-	Id                        primitive.ObjectID `pg:"mongo_id" bson:"_id" json:"-"`
+	Id                        primitive.ObjectID `pg:"-" bson:"_id" json:"-"`
+	MongoID                   string             `pg:"mongo_id" bson:"-" json:"mongo_id"`
 	Survey                    int                `pg:"survey" json:"survey"`
 	Name                      string             `pg:"name" bson:",omitempty" json:"name"`
 	Email                     string             `pg:"email" bson:",omitempty" json:"email"`
