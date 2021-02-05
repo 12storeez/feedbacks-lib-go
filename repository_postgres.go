@@ -17,8 +17,14 @@ func NewPostgresRepository(db *pg.DB) RepositoryPG {
 }
 
 func (p postgresRepository) CountFeedbackBy(article string) (int, error) {
-
-	return 1, nil
+	count, err := p.db.
+		Model(&Feedback{}).
+		Where("article LIKE concat('%', ?, '%')", article).
+		Count()
+	if err != nil {
+		return 0, err
+	}
+	return count, err
 }
 
 func (p postgresRepository) SelectOneForSlack() (*Feedback, error) {
