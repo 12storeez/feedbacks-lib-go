@@ -46,4 +46,5 @@ type Feedback struct {
 	TransportCity             string         `pg:"transport_city" bson:"transport_city,omitempty" json:"transport_city"`
 	Created                   time.Time      `pg:"created" bson:",omitempty" json:"created"`
 	Updated                   time.Time      `pg:"updated" bson:"-" json:"-"`
+	LogisticPretense          string         `pg:"logistic_pretense" json:"pretense"`
 }
